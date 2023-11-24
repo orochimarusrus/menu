@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <title></title>
+  </head>
+
+  <style media="screen">
+    span {
+      margin-right: 15px;
+    }
+
+    div {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+
+    p {
+      width: 500px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+  </style>
+
+  <body>
+      <div>Меню столовой Академии управления на <span id="date"></span></div>
+      <div id="content"></div>
+  </body>
+  <script type="text/javascript">
+    async function get() {
+    let url = 'https://script.google.com/macros/s/AKfycbxU0kHQHz5ozY262ZR-1veg0ZQFn0Z7KdBVgqNgMZG4wnMy-OKK86srjOoawl9goZ5N3w/exec'
+    let obj = await (await fetch(url)).json();
+    var mydata = JSON.parse(obj);
+    console.log(mydata);
+    return mydata;
+}
+var tags;
+(async () => {
+  menu = await get()
+
+  document.getElementById('date').innerHTML = menu.date;
+  var menuDiv = document.getElementById('content');
+  menu.cat.forEach((category, i) => {
+    var div = document.createElement('div');
+    div.innerHTML = "<strong>" + category.cname + "</strong>";
+    category.item.forEach((item, i) => {
+      var p = document.createElement('p');
+      p.innerHTML = "<span>"+item.iname +" </span><span>" + item.iport +"</span><span>" + item.iprice +"</span>";
+      div.appendChild(p);
+    });
+
+
+    menuDiv.appendChild(div);
+  });
+
+
+})()
+  </script>
+
+
+</html>
